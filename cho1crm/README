@@ -1,0 +1,21 @@
+这个项目主要是私用SSM技术把CRM项目做一遍
+一.搭建基础框架
+    1创建项目,创建maven模块
+    2添加依赖
+        spring依赖
+        spirngMVC依赖
+        Mybaits依赖
+        mysql驱动
+        spring事务依赖
+        spring-mybatis依赖
+        druid连接池
+        jackson依赖
+    3创建后端的包结构 创建settings下面的dao domain service controller 创建reosurces下的config下的三个数据库的配置文件
+    4复制crm的前端资源,把静态文件放到webapp下 把jsp文件放到web-inf文件下
+    5创建项目使用的数据库,导入表结构,
+    6创建对应的实体类,对应的dao类和mapper文件 创建controller和service
+    7配置web-inf文件  中央调度器 spirng监听器  乱码过滤器
+    8 配置mybaits文件下的包的别名 mapper文件路径
+    9写springMVC配置文件,有controller类的组件扫描器,视图解析器,注解驱动器,如果需要处理异常,还需要异常类的组件扫描器
+    10写spirng的配置文件,druid连接池的连接信息,数据库的properies文件,sqlsessionfactoery对象的配置文件,dao对象的配置文件, service类的组件扫描器
+二.完成用户登录功能

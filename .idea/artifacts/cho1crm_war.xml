@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cho1crm:war">
+    <output-path>$PROJECT_DIR$/cho1crm/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>cho1crm</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="cho1-crm-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="cho1crm:war exploded" />
+    </root>
+  </artifact>
+</component>

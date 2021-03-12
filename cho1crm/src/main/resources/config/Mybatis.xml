@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置返回值别名-->
+    <typeAliases>
+        <package name="com.bjpowernode.settings.domain"/>
+    </typeAliases>
+    <!--配置mapper文件的地址-->
+    <mappers>
+        <package name="com.bjpowernode.settings.dao"/>
+    </mappers>
+</configuration>
