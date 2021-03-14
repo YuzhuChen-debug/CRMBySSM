@@ -50,7 +50,10 @@
 				success:function (data) {
 
 					//这里处理返回来的数据
-					 alert("后台没有问题");
+					 //alert("后台没有问题");
+					if(data){
+						window.location.href="workbench/index.jsp";
+					}
 				}
 			})
 		}
