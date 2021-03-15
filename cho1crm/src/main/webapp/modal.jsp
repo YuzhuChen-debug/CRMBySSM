@@ -39,6 +39,10 @@
             //处置表格中所有值
             $("#id值")[0].reset();
 
+            //如果当前窗口不是顶级窗口,设置为顶级窗口
+            if(window.top!=window){
+                window.top.location=window.location;
+            }
 
     </script>
 </head>

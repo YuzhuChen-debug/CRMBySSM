@@ -104,6 +104,7 @@
 					* */
 					if (data.success) {
 						//刷新列表
+                        getActivityList(1,2);
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
 					} else {
@@ -113,11 +114,71 @@
 			})
 		})
 
+        getActivityList(1,2);
+
+
+
+
+        //点击修改按钮,打开修改模态窗口
+        $("#editBtn").click(function () {
+            //发送ajax请求,后台获取对应的参数
+            $("#editActivityModal").modal("show");
+        })
 
 
 		
 		
 	});
+    //以下几处,需要调用这刷新市场活动列表函数
+    //1加载页面时候
+    //2添加操作完成以后
+    //3修改操作完成以后
+    //4删除操作完成以后
+    //5点击查询按钮以后
+    //6分页插件操作以后
+	function getActivityList(PageNo,PageSize) {
+
+        var name = $.trim($("#create-name").val());
+        var owner = $.trim($("#create-owner").val());
+        var startDate = $.trim($("#create-startDate").val());
+        var endDate = $.trim($("#create-endDate").val());
+        //发送ajax请求,获取市场活动列表
+        $.ajax({
+            url: "workbench/activity/getActivityListByFuzzySearch",
+            data:{
+                pageNo:PageNo,
+                pageSize:PageSize,
+                name:name,
+                owner:owner,
+                startDate:startDate,
+                endDate:endDate
+            },
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+                //在这里处理返回的数据,
+                /*
+                *   data:{success:true,LATVO:{dataList:[{a1},{a2},{a3}],total:total}}
+                *   or data:{success:false,msg:msg}
+                * */
+
+                if (data.success) {
+                    var html = "";
+                    $.each(data.LATVO.dataList,function (i,n) {
+                        html+= '<tr class="active">';
+                        html+= '    <td><input type="checkbox" name="xz" /></td>';
+                        html+= '    <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.jsp\';">'+n.name+'</a></td>';
+                        html+= '    <td>'+n.owner+'</td>';
+                        html+= '    <td>'+n.startDate+'</td>';
+                        html+= '    <td>'+n.endDate+'</td>';
+                        html+= '</tr>';
+                    })
+                } else {
+                    alert(data.msg);
+                }
+            }
+        })
+    }
 	
 </script>
 </head>
@@ -204,7 +265,7 @@
 						<div class="form-group">
 							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-marketActivityOwner">
+								<select class="form-control" id="edit-owner">
 								  <option>zhangsan</option>
 								  <option>lisi</option>
 								  <option>wangwu</option>
@@ -212,18 +273,18 @@
 							</div>
                             <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="edit-marketActivityName" value="发传单">
+                                <input type="text" class="form-control" id="edit-name" value="发传单">
                             </div>
 						</div>
 
 						<div class="form-group">
 							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-startTime" value="2020-10-10">
+								<input type="text" class="form-control" id="edit-startDate" value="2020-10-10">
 							</div>
 							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-endTime" value="2020-10-20">
+								<input type="text" class="form-control" id="edit-endDate" value="2020-10-20">
 							</div>
 						</div>
 						
@@ -237,7 +298,7 @@
 						<div class="form-group">
 							<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="edit-describe">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+								<textarea class="form-control" rows="3" id="edit-description">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
 							</div>
 						</div>
 						
@@ -246,7 +307,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+					<button type="button" class="btn btn-primary" id="updateBtn">更新</button>
 				</div>
 			</div>
 		</div>
@@ -303,7 +364,7 @@
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="createBtn"><span class="glyphicon glyphicon-plus" ></span> 创建</button>
-				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
@@ -312,15 +373,15 @@
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox"  name="qx" /></td>
 							<td>名称</td>
                             <td>所有者</td>
 							<td>开始日期</td>
 							<td>结束日期</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="active">
+					<tbody id="activityBody">
+						<%--<tr class="active">
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>
                             <td>zhangsan</td>
@@ -333,12 +394,12 @@
                             <td>zhangsan</td>
                             <td>2020-10-10</td>
                             <td>2020-10-20</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>
 			
-			<div style="height: 50px; position: relative;top: 30px;">
+			<%--<div style="height: 50px; position: relative;top: 30px;">
 				<div>
 					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
 				</div>
@@ -371,7 +432,7 @@
 						</ul>
 					</nav>
 				</div>
-			</div>
+			</div>--%>
 			
 		</div>
 		

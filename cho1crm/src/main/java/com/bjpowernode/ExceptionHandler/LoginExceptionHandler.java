@@ -1,6 +1,8 @@
 package com.bjpowernode.ExceptionHandler;
 
 import com.bjpowernode.exceptions.activityException.AddActivityErrorException;
+import com.bjpowernode.exceptions.activityException.SearchActivityCountErrorException;
+import com.bjpowernode.exceptions.activityException.SearchActivityListException;
 import com.bjpowernode.exceptions.loginException.ExpireTimeOutException;
 import com.bjpowernode.exceptions.loginException.IpErrorException;
 import com.bjpowernode.exceptions.loginException.LocalStatusException;
@@ -89,6 +91,30 @@ public class LoginExceptionHandler  {
     @ExceptionHandler(value = AddActivityErrorException.class)
     @ResponseBody
     public Map<String,Object> AddActivityErrorExceptionHandler(Exception e){
+        e.printStackTrace();
+        String msg = e.getMessage();
+        Map<String,Object> map = new HashMap<>();
+        map.put("msg",msg);
+        map.put("success",false);
+        return map;
+    }
+
+
+    @ExceptionHandler(value = SearchActivityListException.class)
+    @ResponseBody
+    public Map<String,Object> SearchActivityListExceptionHandler(Exception e){
+        e.printStackTrace();
+        String msg = e.getMessage();
+        Map<String,Object> map = new HashMap<>();
+        map.put("msg",msg);
+        map.put("success",false);
+        return map;
+    }
+
+
+    @ExceptionHandler(value = SearchActivityCountErrorException.class)
+    @ResponseBody
+    public Map<String,Object> SearchActivityCountErrorExceptionHandler(Exception e){
         e.printStackTrace();
         String msg = e.getMessage();
         Map<String,Object> map = new HashMap<>();

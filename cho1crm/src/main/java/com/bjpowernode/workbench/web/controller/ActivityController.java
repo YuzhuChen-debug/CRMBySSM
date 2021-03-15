@@ -1,5 +1,7 @@
 package com.bjpowernode.workbench.web.controller;
 
+import com.bjpowernode.VO.ListAndTotalCount;
+import com.bjpowernode.exceptions.activityException.ActivityException;
 import com.bjpowernode.exceptions.activityException.AddActivityErrorException;
 import com.bjpowernode.exceptions.userException.UserCouldNotFoundException;
 import com.bjpowernode.settings.domain.User;
@@ -46,6 +48,20 @@ public class ActivityController {
         Map<String,Object> map = new HashMap<>();
         boolean success = activityService.addActivity(a);
         map.put("success",success);
+        return map;
+    }
+
+
+    @RequestMapping("/getActivityListByFuzzySearch")
+    @ResponseBody
+    public Map<String,Object> getActivityListByFuzzySearch(Activity activity,String PageNo,String PageSize,HttpServletRequest request) throws ActivityException {
+        int pageNo = Integer.parseInt(PageNo);
+        int pageSize =Integer.parseInt(PageSize);
+        int pageCount = pageSize*(pageNo-1);
+        Map<String,Object> map = new HashMap<>();
+        ListAndTotalCount LATVO = activityService.getActivityListByFuzzySearch(activity,pageCount,pageSize);
+        map.put("success",true);
+        map.put("LATVO",LATVO);
         return map;
     }
 }
