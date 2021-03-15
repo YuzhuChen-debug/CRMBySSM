@@ -12,7 +12,7 @@ public class LoginExceptionHandler  {
     public ModelAndView  LoginActOrLoginPwdErrorExceptionHandler(Exception e){
         ModelAndView mv = new ModelAndView();
         mv.addObject("e",e);
-        mv.setViewName("forword:/login.jsp");
+        mv.setViewName("/error");
         return mv;
     }
 
@@ -20,7 +20,7 @@ public class LoginExceptionHandler  {
     public ModelAndView  IpErrorException(Exception e){
         ModelAndView mv = new ModelAndView();
         mv.addObject("e",e);
-        mv.setViewName("forword:/login.jsp");
+        mv.setViewName("/error");
         return mv;
     }
 }

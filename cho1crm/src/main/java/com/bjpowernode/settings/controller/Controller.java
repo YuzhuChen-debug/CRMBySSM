@@ -7,6 +7,8 @@ import com.bjpowernode.utils.DateTimeUtil;
 import com.bjpowernode.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/settings/user")
@@ -16,7 +18,8 @@ public class Controller {
     private UserService userService;
 
     @RequestMapping("/login.do")
-    public String login(String loginAct, String loginPwd, HttpServletRequest request) throws LoginException {
+    @ResponseBody
+    public boolean login(String loginAct, String loginPwd, HttpServletRequest request) throws LoginException {
         String ip = request.getRemoteAddr();
         System.out.println(ip);
         User user = new User();
@@ -26,7 +29,8 @@ public class Controller {
         user.setExpireTime(DateTimeUtil.getSysTime());
         user.setAllowIps(ip);
         boolean flag = userService.login(user);
+        //System.out.println(1);
             request.getSession().setAttribute("user",user);
-            return "settings/index";
+            return flag;
     }
 }
