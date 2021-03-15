@@ -6,9 +6,11 @@
     <!--配置返回值别名-->
     <typeAliases>
         <package name="com.bjpowernode.settings.domain"/>
+        <package name="com.bjpowernode.workbench.domain"/>
     </typeAliases>
     <!--配置mapper文件的地址-->
     <mappers>
         <package name="com.bjpowernode.settings.dao"/>
+        <package name="com.bjpowernode.workbench.dao"/>
     </mappers>
 </configuration>

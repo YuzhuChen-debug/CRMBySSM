@@ -1,6 +1,6 @@
 package com.bjpowernode.settings.controller;
 
-import com.bjpowernode.exceptions.LoginException;
+import com.bjpowernode.exceptions.loginException.LoginException;
 import com.bjpowernode.settings.domain.User;
 import com.bjpowernode.settings.services.UserService;
 import com.bjpowernode.utils.DateTimeUtil;

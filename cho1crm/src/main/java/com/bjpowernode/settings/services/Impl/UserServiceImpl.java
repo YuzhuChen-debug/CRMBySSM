@@ -1,11 +1,14 @@
 package com.bjpowernode.settings.services.Impl;
 
-import com.bjpowernode.exceptions.*;
+import com.bjpowernode.exceptions.loginException.*;
+import com.bjpowernode.exceptions.userException.UserCouldNotFoundException;
 import com.bjpowernode.settings.dao.UserDao;
 import com.bjpowernode.settings.domain.User;
 import com.bjpowernode.settings.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -37,5 +40,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return u;
+    }
+
+    @Override
+    public List<User> getuList() throws UserCouldNotFoundException {
+        List<User> uList = userDao.getuList();
+        if(uList==null){
+            throw new UserCouldNotFoundException("搜索用户列表失败");
+        }
+        return uList;
     }
 }

@@ -6,6 +6,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!--设置settings下的组件扫描器-->
     <context:component-scan base-package="com.bjpowernode.settings.controller"/>
+    <!--设置workvbench下的组件扫描器-->
+    <context:component-scan base-package="com.bjpowernode.workbench.web.controller"/>
     <!--设置异常处理类的组件扫描器-->
     <context:component-scan base-package="com.bjpowernode.ExceptionHandler"/>
     <!--配置试图解析器-->
@@ -15,5 +17,6 @@
     </bean>
     <!--注册注解驱动器-->
     <MVC:annotation-driven/>
+
     <mvc:default-servlet-handler></mvc:default-servlet-handler>
 </beans>
