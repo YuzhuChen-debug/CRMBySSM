@@ -10,5 +10,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    boolean login(User user) throws LoginActOrLoginPwdErrorException, LocalStatusException, LoginException;
+    User login(User user) throws LoginActOrLoginPwdErrorException, LocalStatusException, LoginException;
 }

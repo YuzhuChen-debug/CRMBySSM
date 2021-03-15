@@ -18,8 +18,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean login(User user) throws LoginException {
-        boolean flag = true;
+    public User login(User user) throws LoginException {
         User u = userDao.login(user);
         if(u==null){
             throw new LoginActOrLoginPwdErrorException("账号或者用户名错误");
@@ -37,6 +36,6 @@ public class UserServiceImpl implements UserService {
             throw new ExpireTimeOutException("账号已失效");
         }
 
-        return flag;
+        return u;
     }
 }

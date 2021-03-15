@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/settings/user")
 @org.springframework.stereotype.Controller
@@ -19,7 +21,7 @@ public class Controller {
 
     @RequestMapping("/login.do")
     @ResponseBody
-    public boolean login(String loginAct, String loginPwd, HttpServletRequest request) throws LoginException {
+    public Map<String,Object> login(String loginAct, String loginPwd, HttpServletRequest request) throws LoginException {
         String ip = request.getRemoteAddr();
         System.out.println(ip);
         User user = new User();
@@ -28,9 +30,11 @@ public class Controller {
         user.setLoginPwd(loginPwdMD5);
         user.setExpireTime(DateTimeUtil.getSysTime());
         user.setAllowIps(ip);
-        boolean flag = userService.login(user);
+        Map<String,Object> map = new HashMap<>();
+        User u = userService.login(user);
+        map.put("success",true);
         //System.out.println(1);
-            request.getSession().setAttribute("user",user);
-            return flag;
+            request.getSession().setAttribute("user",u);
+            return map;
     }
 }

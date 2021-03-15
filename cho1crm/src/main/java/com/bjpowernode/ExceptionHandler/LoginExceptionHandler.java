@@ -1,26 +1,24 @@
 package com.bjpowernode.ExceptionHandler;
 
-import com.bjpowernode.exceptions.IpErrorException;
-import org.springframework.jdbc.LobRetrievalFailureException;
+import com.bjpowernode.exceptions.LoginActOrLoginPwdErrorException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class LoginExceptionHandler  {
-    @ExceptionHandler(value = LobRetrievalFailureException.class)
-    public ModelAndView  LoginActOrLoginPwdErrorExceptionHandler(Exception e){
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("e",e);
-        mv.setViewName("/error");
-        return mv;
+    @ExceptionHandler(value = LoginActOrLoginPwdErrorException.class)
+    @ResponseBody
+    public Map<String,Object> LoginActOrLoginPwdErrorExceptionHandler(Exception e){
+        e.printStackTrace();
+        String msg = e.getMessage();
+        Map<String,Object> map = new HashMap<>();
+        map.put("msg",msg);
+        map.put("success",false);
+        return map;
     }
 
-    @ExceptionHandler(value = IpErrorException.class)
-    public ModelAndView  IpErrorException(Exception e){
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("e",e);
-        mv.setViewName("/error");
-        return mv;
-    }
+
 }

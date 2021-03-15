@@ -48,11 +48,13 @@
 				dataType:"json",
 				type:"post",
 				success:function (data) {
-
+					//alert(data);
 					//这里处理返回来的数据
 					 //alert("后台没有问题");
-					if(data){
+					if(data.success){
 						window.location.href="workbench/index.jsp";
+					}else{
+						$("#msg").html(data.msg);
 					}
 				}
 			})
