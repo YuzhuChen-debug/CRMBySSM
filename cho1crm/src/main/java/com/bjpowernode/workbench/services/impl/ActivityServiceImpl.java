@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.LambdaConversionException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -32,13 +33,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public ListAndTotalCount getActivityListByFuzzySearch(Activity activity, int pageCount, int pageSize) throws ActivityException {
+    public ListAndTotalCount getActivityListByFuzzySearch(Map<String,Object> map) throws ActivityException {
         ListAndTotalCount<Activity> LATVO = new ListAndTotalCount<>();
-        int total = activityDao.getTotal(activity);
+        int total = activityDao.getTotal(map);
         if(total==-1){
             throw new SearchActivityCountErrorException("查询市场活动条数错误");
         }
-        List<Activity> aList = activityDao.getActivityListByFuzzySearch(activity,pageCount,pageSize);
+        List<Activity> aList = activityDao.getActivityListByFuzzySearch(map);
         if(aList==null){
             throw new SearchActivityListException("查询市场活动列表错误");
         }

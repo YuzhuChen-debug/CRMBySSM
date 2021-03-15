@@ -6,26 +6,20 @@
 
     <select id="getActivityListByFuzzySearch" resultType="Activity">
         select
-            a.id,
-            u.name as owner,
-            a.name,
-            a.startDate,
-            a.endDate,
-            a.cost,
-            a.description,
-            a.createTime,
-            a.createBy,
-            a.editTime,
-            a.editBy
+        a.id,
+        a.name,
+        u.name as owner,
+        a.startDate,
+        a.endDate
         from tbl_activity a
         join tbl_user u
-        on a.owner = u.id
+        on a.owner=u.id
         <where>
             <if test="name!=null and name!=''">
-                a.name=#{name}
+                a.name like '%' #{name} '%'
             </if>
             <if test="owner!=null and owner!=''">
-               and  u.name=#{owner}
+                and u.name like '%' #{owner} '%'
             </if>
             <if test="startDate!=null and startDate!=''">
                 and a.startDate &gt; #{startDate}
@@ -35,23 +29,20 @@
             </if>
         </where>
         order by a.createTime desc
-        limit #{PageCount},#{pageSize}
-
-
-
+        limit #{pageCount},#{pageSize}
     </select>
 
     <select id="getTotal" resultType="int">
-        select Count(*)
+        select count(*)
         from tbl_activity a
         join tbl_user u
-        on a.owner = u.id
+        on a.owner=u.id
         <where>
             <if test="name!=null and name!=''">
-                a.name=#{name}
+                a.name like '%' #{name} '%'
             </if>
             <if test="owner!=null and owner!=''">
-                and  u.name=#{owner}
+                and u.name like '%' #{owner} '%'
             </if>
             <if test="startDate!=null and startDate!=''">
                 and a.startDate &gt; #{startDate}

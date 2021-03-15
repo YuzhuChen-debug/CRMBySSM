@@ -1,13 +1,15 @@
 package com.bjpowernode.workbench.dao;
 
 import com.bjpowernode.workbench.domain.Activity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ActivityDao {
     int addActivity(Activity a);
 
-    int getTotal(Activity activity);
+    int getTotal(Map<String,Object> map);
 
-    List<Activity> getActivityListByFuzzySearch(Activity activity, int pageCount, int pageSize);
+    List<Activity> getActivityListByFuzzySearch(Map<String,Object> map);
 }

@@ -16,11 +16,11 @@
 	<link rel="stylesheet" type="text/css" href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
 	<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
-<script type="text/javascript">
-
-
-
+	<script type="text/javascript">
 
 	$(function(){
 		//点击创建按钮,发送ajax请求,获取uList
@@ -104,7 +104,7 @@
 					* */
 					if (data.success) {
 						//刷新列表
-                        getActivityList(1,2);
+						pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
 					} else {
@@ -114,9 +114,12 @@
 			})
 		})
 
-        getActivityList(1,2);
+		pageList(1 ,2);
 
-
+		$("#searchBtn").click(function () {
+			//alert(1);
+			pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+		})
 
 
         //点击修改按钮,打开修改模态窗口
@@ -136,18 +139,18 @@
     //4删除操作完成以后
     //5点击查询按钮以后
     //6分页插件操作以后
-	function getActivityList(PageNo,PageSize) {
+	function pageList(PageNo,PageSize) {
 
-        var name = $.trim($("#create-name").val());
-        var owner = $.trim($("#create-owner").val());
-        var startDate = $.trim($("#create-startDate").val());
-        var endDate = $.trim($("#create-endDate").val());
+        var name = $.trim($("#search-name").val());
+        var owner = $.trim($("#search-owner").val());
+        var startDate = $.trim($("#search-startDate").val());
+        var endDate = $.trim($("#search-endDate").val());
         //发送ajax请求,获取市场活动列表
         $.ajax({
             url: "workbench/activity/getActivityListByFuzzySearch",
             data:{
-                pageNo:PageNo,
-                pageSize:PageSize,
+                pageNoStr:PageNo,
+                pageSizeStr:PageSize,
                 name:name,
                 owner:owner,
                 startDate:startDate,
@@ -167,16 +170,39 @@
                     $.each(data.LATVO.dataList,function (i,n) {
                         html+= '<tr class="active">';
                         html+= '    <td><input type="checkbox" name="xz" /></td>';
-                        html+= '    <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.jsp\';">'+n.name+'</a></td>';
+                        html+= '    <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail?id="'+n.id+'"\';">'+n.name+'</a></td>';
                         html+= '    <td>'+n.owner+'</td>';
                         html+= '    <td>'+n.startDate+'</td>';
                         html+= '    <td>'+n.endDate+'</td>';
                         html+= '</tr>';
                     })
-                } else {
+					$("#activityBody").html(html);
+
+					var totalPages = data.LATVO.total%PageSize==0 ? data.LATVO.total/PageSize :parseInt(data.LATVO.total/PageSize)+1;
+					$("#activityPage").bs_pagination({
+						currentPage: PageNo, // 页码
+						rowsPerPage: PageSize, // 每页显示的记录条数
+						maxRowsPerPage: 20, // 每页最多显示的记录条数
+						totalPages: totalPages, // 总页数
+						totalRows: data.LATVO.total, // 总记录条数
+
+						visiblePageLinks: 3, // 显示几个卡片
+
+						showGoToPage: true,
+						showRowsPerPage: true,
+						showRowsInfo: true,
+						showRowsDefaultInfo: true,
+
+						onChangePage : function(event, data){
+							pageList(data.currentPage , data.rowsPerPage);
+						}
+					});
+				} else {
                     alert(data.msg);
                 }
             }
+
+
         })
     }
 	
@@ -220,7 +246,7 @@
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" readonly id="create-endDate">
+								<input type="text" class="form-control time" readonly  id="create-endDate">
 							</div>
 						</div>
                         <div class="form-group">
@@ -332,14 +358,14 @@
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-name">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-owner">
 				    </div>
 				  </div>
 
@@ -347,17 +373,17 @@
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="startTime" />
+					  <input class="form-control time" readonly type="text" id="search-startDate" />
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="endTime">
+					  <input class="form-control time" type="text" readonly id="search-endDate">
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default">查询</button>
+				  <button type="button" class="btn btn-default" id="searchBtn">查询</button>
 				  
 				</form>
 			</div>
@@ -397,10 +423,10 @@
                         </tr>--%>
 					</tbody>
 				</table>
-			</div>
+			</div >
 			
-			<%--<div style="height: 50px; position: relative;top: 30px;">
-				<div>
+			<div id="activityPage">
+				<%--<div>
 					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
 				</div>
 				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">

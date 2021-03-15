@@ -54,14 +54,21 @@ public class ActivityController {
 
     @RequestMapping("/getActivityListByFuzzySearch")
     @ResponseBody
-    public Map<String,Object> getActivityListByFuzzySearch(Activity activity,String PageNo,String PageSize,HttpServletRequest request) throws ActivityException {
-        int pageNo = Integer.parseInt(PageNo);
-        int pageSize =Integer.parseInt(PageSize);
+    public Map<String,Object> getActivityListByFuzzySearch(Activity activity,String pageNoStr,String pageSizeStr,HttpServletRequest request) throws ActivityException {
+        int pageNo = Integer.parseInt(pageNoStr);
+        int pageSize =Integer.parseInt(pageSizeStr);
         int pageCount = pageSize*(pageNo-1);
         Map<String,Object> map = new HashMap<>();
-        ListAndTotalCount LATVO = activityService.getActivityListByFuzzySearch(activity,pageCount,pageSize);
-        map.put("success",true);
-        map.put("LATVO",LATVO);
-        return map;
+        map.put("name",activity.getName());
+        map.put("owner",activity.getOwner());
+        map.put("startDate",activity.getStartDate());
+        map.put("endDate",activity.getEndDate());
+        map.put("pageCount",pageCount);
+        map.put("pageSize",pageSize);
+        ListAndTotalCount LATVO = activityService.getActivityListByFuzzySearch(map);
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("success",true);
+        map1.put("LATVO",LATVO);
+        return map1;
     }
 }
