@@ -129,9 +129,62 @@
 
         //点击修改按钮,打开修改模态窗口
         $("#editBtn").click(function () {
-            //发送ajax请求,后台获取对应的参数
-            $("#editActivityModal").modal("show");
+        	var $xz=$("input[name=xz]:checked");
+        	if($xz.length==0){
+        		alert("请选择需要修改的对象");
+			}else if($xz.length>1){
+        		alert("同时只能修改一条记录");
+			}else{
+        		var id =$("input[name]").val();
+				//发送ajax请求,后台获取对应的参数
+				$.ajax({
+					url: "workbench/activity/getUserListAndActivityById.do",
+					data:{
+						id:id
+					},
+					dataType: "json",
+					type: "get",
+					success: function (data) {
+						//alert(data.map.uList);
+						//在这里处理返回的数据,
+						/*
+						* 	data:{success:true,map:{a:a,uList:[{u1},{u2},{u3}]}}
+						* or data:{success:false,msg:msg}
+						* */
+						if (data.success) {
+							//把获得的数据铺到修改模态窗口
+							var html="<option></option>";
+							$.each(data.map.uList,function (i,n) {
+								html+="<option value='"+n.id+"'>"+n.name+"</option>";
+							})
+							$("#edit-owner").html(html);
+							//alert(data.map.a.owner);
+							$("#edit-owner").val(data.map.a.owner);
+							$("#edit-id").val(data.map.a.id);
+							$("#edit-name").val(data.map.a.name);
+							$("#edit-startDate").val(data.map.a.startDate);
+							$("#edit-endDate").val(data.map.a.endDate);
+							$("#edit-cost").val(data.map.a.cost);
+							$("#edit-description").val(data.map.a.description);
+							//打开模态窗口
+							$("#editActivityModal").modal("show");
+						} else {
+								alert(data.msg);
+						}
+					}
+				})
+
+			}
+
         })
+
+		//完成全选和取消全选功能
+		$("#qx").click(function () {
+			$("input[name=xz]").prop("checked",this.checked)
+		})
+		$("#activityBody").on("click",$("input[name=xz]"),function () {
+			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length)
+		})
 
 
 		
@@ -179,8 +232,8 @@
                     var html = "";
                     $.each(data.LATVO.dataList,function (i,n) {
                         html+= '<tr class="active">';
-                        html+= '    <td><input type="checkbox" name="xz" /></td>';
-                        html+= '    <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail?id="'+n.id+'"\';">'+n.name+'</a></td>';
+                        html+= '    <td><input type="checkbox" name="xz" value="'+n.id+'" /></td>';
+                        html+= '    <td><a style="text-decoration: none; cursor: pointer;"  onclick="window.location.href=\'workbench/activity/detail?id="'+n.id+'"\';">'+n.name+'</a></td>';
                         html+= '    <td>'+n.owner+'</td>';
                         html+= '    <td>'+n.startDate+'</td>';
                         html+= '    <td>'+n.endDate+'</td>';
@@ -302,44 +355,44 @@
 				<div class="modal-body">
 				
 					<form class="form-horizontal" role="form">
-					
+						<input type="hidden" id="edit-id"/>
 						<div class="form-group">
 							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="edit-owner">
-								  <option>zhangsan</option>
+								  <%--<option>zhangsan</option>
 								  <option>lisi</option>
-								  <option>wangwu</option>
+								  <option>wangwu</option>--%>
 								</select>
 							</div>
                             <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="edit-name" value="发传单">
+                                <input type="text" class="form-control" id="edit-name" >
                             </div>
 						</div>
 
 						<div class="form-group">
 							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-startDate" value="2020-10-10">
+								<input type="text" class="form-control time"  readonly id="edit-startDate" >
 							</div>
 							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-endDate" value="2020-10-20">
+								<input type="text" class="form-control time " readonly id="edit-endDate" >
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label for="edit-cost" class="col-sm-2 control-label">成本</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-cost" value="5,000">
+								<input type="text" class="form-control" id="edit-cost" >
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="edit-description">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+								<textarea class="form-control" rows="3" id="edit-description"></textarea>
 							</div>
 						</div>
 						
@@ -414,7 +467,7 @@
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox"  name="qx" /></td>
+							<td><input type="checkbox"  id="qx" /></td>
 							<td>名称</td>
                             <td>所有者</td>
 							<td>开始日期</td>

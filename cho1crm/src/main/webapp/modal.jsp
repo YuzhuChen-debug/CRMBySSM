@@ -44,6 +44,14 @@
                 window.top.location=window.location;
             }
 
+            //全选和取消全选
+            $("#qx").click(function () {
+                $("input[name=xz]").prop("checked",this.checked);
+            })
+            $("#activityBody").on("click",$("input[name=xz]"),function () {
+                $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+            })
+
     </script>
 </head>
 <body>

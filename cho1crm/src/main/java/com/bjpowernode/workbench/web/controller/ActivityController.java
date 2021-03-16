@@ -3,6 +3,7 @@ package com.bjpowernode.workbench.web.controller;
 import com.bjpowernode.VO.ListAndTotalCount;
 import com.bjpowernode.exceptions.activityException.ActivityException;
 import com.bjpowernode.exceptions.activityException.AddActivityErrorException;
+import com.bjpowernode.exceptions.activityException.SearchActivityListException;
 import com.bjpowernode.exceptions.userException.UserCouldNotFoundException;
 import com.bjpowernode.settings.domain.User;
 import com.bjpowernode.settings.services.UserService;
@@ -63,7 +64,7 @@ public class ActivityController {
 
     @RequestMapping("/getActivityListByFuzzySearch")
     @ResponseBody
-    public Map<String,Object> getActivityListByFuzzySearch(Activity activity,String pageNoStr,String pageSizeStr,HttpServletRequest request) throws ActivityException {
+    public Map<String,Object> getActivityListByFuzzySearch(Activity activity,String pageNoStr,String pageSizeStr) throws ActivityException {
         int pageNo = Integer.parseInt(pageNoStr);
         int pageSize =Integer.parseInt(pageSizeStr);
         int pageCount = pageSize*(pageNo-1);
@@ -79,5 +80,18 @@ public class ActivityController {
         map1.put("success",true);
         map1.put("LATVO",LATVO);
         return map1;
+    }
+
+    @RequestMapping("/getUserListAndActivityById.do")
+    @ResponseBody
+    public Map<String,Object> getUserListAndActivityById(String id) throws UserCouldNotFoundException, SearchActivityListException {
+        System.out.println(1);
+        Map<String,Object> map1 = new HashMap<>();
+        Map<String,Object> map = activityService.getUserListAndActivityById(id);
+        map1.put("success",true);
+        map1.put("map",map);
+        System.out.println(5);
+        return map1;
+
     }
 }
