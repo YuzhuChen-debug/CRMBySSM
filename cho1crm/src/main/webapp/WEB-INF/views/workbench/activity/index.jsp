@@ -117,6 +117,11 @@
 		pageList(1 ,2);
 
 		$("#searchBtn").click(function () {
+			//点击查询按钮，把查询框内的数值赋给隐藏框
+			$("#hidden-name").val($.trim($("#search-name").val()));
+			$("#hidden-owner").val($.trim($("#search-owner").val()));
+			$("#hidden-startDate").val($.trim($("#search-startDate").val()));
+			$("#hidden-endDate").val($.trim($("#search-endDate").val()));
 			//alert(1);
 			pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 		})
@@ -140,6 +145,11 @@
     //5点击查询按钮以后
     //6分页插件操作以后
 	function pageList(PageNo,PageSize) {
+		//把隐藏域的数值赋给查询框
+		$("#search-name").val($.trim($("#hidden-name").val()));
+		$("#search-owner").val($.trim($("#hidden-owner").val()));
+		$("#search-startDate").val($.trim($("#hidden-startDate").val()));
+		$("#search-endDate").val($.trim($("#hidden-endDate").val()));
 
         var name = $.trim($("#search-name").val());
         var owner = $.trim($("#search-owner").val());
@@ -209,6 +219,11 @@
 </script>
 </head>
 <body>
+
+	<input type="hidden" id="hidden-owner"/>
+	<input type="hidden" id="hidden-name"/>
+	<input type="hidden" id="hidden-startDate"/>
+	<input type="hidden" id="hidden-endDate"/>
 
 	<!-- 创建市场活动的模态窗口 -->
 	<div class="modal fade" id="createActivityModal" role="dialog">

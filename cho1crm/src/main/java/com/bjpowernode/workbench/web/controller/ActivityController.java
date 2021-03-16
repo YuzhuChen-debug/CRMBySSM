@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -27,6 +28,14 @@ public class ActivityController {
  private ActivityService activityService;
     @Autowired
  private UserService userService;
+
+
+    @RequestMapping("/goIndex.do")
+    public ModelAndView goLogin()  {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("workbench/activity/index");
+        return mv;
+    }
    @RequestMapping("/getuList")
    @ResponseBody
    public Map<String,Object> getuList() throws UserCouldNotFoundException {

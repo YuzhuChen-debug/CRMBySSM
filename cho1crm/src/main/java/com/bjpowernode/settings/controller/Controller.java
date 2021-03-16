@@ -8,8 +8,10 @@ import com.bjpowernode.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,5 +38,21 @@ public class Controller {
         //System.out.println(1);
             request.getSession().setAttribute("user",u);
             return map;
+    }
+
+
+    @RequestMapping("/goLogin.do")
+    public ModelAndView goLogin(HttpServletResponse response)  {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("login");
+        return mv;
+    }
+
+
+    @RequestMapping("/goActivity.do")
+    public ModelAndView goActivity(HttpServletResponse response)  {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("workbench/index");
+        return mv;
     }
 }
