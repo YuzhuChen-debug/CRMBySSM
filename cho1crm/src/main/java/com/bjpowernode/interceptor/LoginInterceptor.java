@@ -12,7 +12,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
          //UTL:除了login.jsp是可以公开访问的，其他的URL都进行拦截控制
-        if (uri.indexOf("/login") >= 0||uri.indexOf("/Login") >= 0) {
+        if (uri.indexOf("login") >= 0||uri.indexOf("Login") >= 0) {
             return true;
         }
          //获取session
@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
        //不符合条件的给出提示信息，并转发到登录页面
         request.setAttribute("msg", "您还没有登录，请先登录！");
-        response.sendRedirect("/login.jsp");
+        response.sendRedirect(request.getContextPath()+"/index.html");
         return false;
 
     }

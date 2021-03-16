@@ -21,17 +21,16 @@
     <mvc:default-servlet-handler></mvc:default-servlet-handler>
 
     <!--注册拦截器-->
-    <!--<MVC:interceptors>
+    <MVC:interceptors>
         <MVC:interceptor>
-        &lt;!&ndash;设置所有所要拦截的路径&ndash;&gt;
-        <MVC:mapping path="/**"/>
-        &lt;!&ndash;排除不需要拦截的路径&ndash;&gt;
-        <MVC:exclude-mapping path="/settings/user/goLogin.do"/>
-        &lt;!&ndash;<MVC:exclude-mapping path="/login.jsp"/>
-        <MVC:exclude-mapping path="/image/**"/>
-        <MVC:exclude-mapping path="/jquery/**"/>
-        <MVC:exclude-mapping path="/index.html"/>&ndash;&gt;
-        <bean class="com.bjpowernode.interceptor.LoginInterceptor"/>
-    </MVC:interceptor>
-    </MVC:interceptors>-->
+            <!--设置所有所要拦截的路径-->
+            <MVC:mapping path="/**"/>
+            <!--排除不需要拦截的路径-->
+            <!--<MVC:exclude-mapping path="/settings/user/goLogin.do"/>-->
+            <MVC:exclude-mapping path="/index.html"/>
+            <MVC:exclude-mapping path="/image/**"/>
+            <MVC:exclude-mapping path="/jquery/**"/>
+            <bean class="com.bjpowernode.interceptor.LoginInterceptor"/>
+            </MVC:interceptor>
+    </MVC:interceptors>
 </beans>
